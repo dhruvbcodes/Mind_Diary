@@ -6,7 +6,7 @@ from keras.models import model_from_json
 import keras
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 import numpy as np
-from pyrebase import initialize_app
+import firebase
 import requests
 from streamlit_lottie import st_lottie
 import emaill
@@ -34,10 +34,10 @@ firebaseConfig = {
     'appId': "1:752886973714:web:d9b98644b862b8978d1fcb",
 }
 
-firebase = initialize_app(firebaseConfig)
-auth = firebase.auth()
-db = firebase.database()
-storage = firebase.storage()
+app = firebase.initialize_app(firebaseConfig)
+auth = app.auth()
+db = app.database()
+storage = app.storage()
 
 
 @st.cache_data
