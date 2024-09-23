@@ -2,7 +2,7 @@ import streamlit as st
 import speech_recognition as sr
 from textblob import TextBlob
 import cv2
-from keras.models import model_from_json
+from keras.models import load_model
 import keras
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 import numpy as np
@@ -18,16 +18,20 @@ st.set_page_config(page_title="Mind-Diary", page_icon="img.png")
 
 emotion_dict = {0:'angry', 1 :'happy', 2: 'neutral', 3:'sad', 4: 'surprise'}
 
+from keras.models import model_from_json
+
 @st.cache_resource
-def load_model():
-    json_file = open('emotion_model1.json', 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
+def load_emotion_model():
+    with open('emotion_model1.json', 'r') as json_file:
+        loaded_model_json = json_file.read()
+    
     classifier = model_from_json(loaded_model_json)
     classifier.load_weights("emotion_model1.h5")
+    
     return classifier
 
-classifier = load_model()
+classifier = load_emotion_model()
+
 
 
 api_key=st.secrets["API_KEY"]
