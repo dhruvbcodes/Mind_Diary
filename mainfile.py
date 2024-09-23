@@ -17,11 +17,18 @@ import pandas as pd
 st.set_page_config(page_title="Mind-Diary", page_icon="img.png")
 
 emotion_dict = {0:'angry', 1 :'happy', 2: 'neutral', 3:'sad', 4: 'surprise'}
-json_file = open('emotion_model1.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-classifier = model_from_json(loaded_model_json)
-classifier.load_weights("emotion_model1.h5")
+
+@st.cache_resource
+def load_model():
+    json_file = open('emotion_model1.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    classifier = model_from_json(loaded_model_json)
+    classifier.load_weights("emotion_model1.h5")
+    return classifier
+
+classifier = load_model()
+
 
 api_key=st.secrets["API_KEY"]
 firebaseConfig = {
